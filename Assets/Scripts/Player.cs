@@ -9,7 +9,7 @@ public class Player : MonoBehaviour {
 
 
     void Awake() {
-        rb = GetComponentInChildren<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update() {
@@ -17,13 +17,8 @@ public class Player : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        move();
+        Vector3 vel = rb.linearVelocity;
+        vel.x = moveInput.x * moveSpeed;
+        rb.linearVelocity = vel;
     }
-
-
-    void move() {
-        Vector3 newPos = transform.position + new Vector3(moveInput.x * moveSpeed, 0, 0);
-        rb.linearVelocity = newPos;
-    }
-
 }
