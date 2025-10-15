@@ -26,6 +26,12 @@ public class AudioManager : MonoBehaviour {
     private bool enableAutoAdvance = true;
     private Coroutine watchCo;
 
+    [Header("Auto-crossfade")]
+    [SerializeField, Range(0f, 1f)] private float autoCrossfadeAt = 0.90f; // 90%
+    [SerializeField] private float crossfadeSeconds = 0.5f;
+    private bool crossfadeArmed = true;
+
+
     private bool appFocused = true;
     private bool osPaused = false;
 
@@ -132,23 +138,34 @@ public class AudioManager : MonoBehaviour {
     }
 
     private void RestartWatcher() {
+        crossfadeArmed = true;
         if (watchCo != null) StopCoroutine(watchCo);
         watchCo = StartCoroutine(WatchMusicEnd());
     }
+
 
     private IEnumerator WatchMusicEnd() {
         while (true) {
             if (!enableAutoAdvance) yield break;
             if (!music || !music.clip) { yield return null; continue; }
 
-            // if app is unfocused or OS-paused, do nothing
             if (!appFocused || osPaused || AudioListener.pause) { yield return null; continue; }
 
-            // consider “ended” only when playback stopped AND cursor reset to start
-            bool ended = !music.isPlaying && music.timeSamples == 0 && music.clip;
-            if (ended) {
-                PlayNextRandom(exclude: music.clip);
-                yield break; // next PlayMusic restarts watcher
+            if (music.isPlaying) {
+                float len = music.clip.length;
+                if (len > 0f) {
+                    float pct = music.time / len;
+                    if (crossfadeArmed && pct >= autoCrossfadeAt) {
+                        crossfadeArmed = false;
+                        PlayNextRandom(exclude: music.clip, fadeSeconds: crossfadeSeconds);
+                        yield break;
+                    }
+                }
+            } else {
+                if (music.timeSamples == 0 && music.clip) {
+                    PlayNextRandom(exclude: music.clip, fadeSeconds: crossfadeSeconds);
+                    yield break;
+                }
             }
             yield return null;
         }
