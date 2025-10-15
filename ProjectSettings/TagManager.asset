@@ -50,5 +50,8 @@ TagManager:
   - name: Box front
     uniqueID: 3105303403
     locked: 0
+  - name: Pause menu
+    uniqueID: 338673579
+    locked: 0
   m_RenderingLayers:
   - Default

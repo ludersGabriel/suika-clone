@@ -6,9 +6,12 @@ public class PlayerInputControl : MonoBehaviour {
 
     public static Vector2 moveInput { get; set; }
     public static bool isDropPressed { get; set; }
+    public static bool isCancelPressed { get; set; }
 
     private InputAction moveAction;
     private InputAction dropAction;
+
+    private InputAction cancelAction;
 
 
     void Awake() {
@@ -16,6 +19,7 @@ public class PlayerInputControl : MonoBehaviour {
 
         moveAction = playerInput.actions["Move"];
         dropAction = playerInput.actions["Drop"];
+        cancelAction = playerInput.actions["Cancel"];
     }
 
 
@@ -23,6 +27,6 @@ public class PlayerInputControl : MonoBehaviour {
     void Update() {
         moveInput = moveAction.ReadValue<Vector2>();
         isDropPressed = dropAction.triggered;
-
+        isCancelPressed = cancelAction.triggered;
     }
 }
