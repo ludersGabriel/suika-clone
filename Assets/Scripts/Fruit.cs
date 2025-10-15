@@ -55,7 +55,7 @@ public class Fruit : MonoBehaviour {
             GameManager.AddScore(fruitData.Points);
         } else GameManager.AddScore(fruitData.Points);
 
-
+        AudioManager.I.PlaySFX("pop");
         Destroy(other.gameObject);
         Destroy(gameObject);
     }
