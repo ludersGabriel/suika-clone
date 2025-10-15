@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public static void TriggerGameOver() => IsGameOver = true;
+
+
     private static int score;
     public static int Score {
         get => score;
@@ -70,7 +73,7 @@ public class GameManager : MonoBehaviour {
     }
 
     private void HandleGameOver() {
-        IsGameOver = true;
+        Time.timeScale = 0f;
     }
 
     private void HandleGamePause() {
