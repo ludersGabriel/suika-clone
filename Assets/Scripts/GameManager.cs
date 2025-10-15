@@ -14,7 +14,10 @@ public class GameManager : MonoBehaviour {
         get => isGameOver;
         private set {
             isGameOver = value;
-            if (isGameOver) OnGameOver?.Invoke();
+            if (isGameOver) {
+                OnGameOver?.Invoke();
+                score = 0;
+            }
         }
     }
 
@@ -55,6 +58,7 @@ public class GameManager : MonoBehaviour {
         HandleScoreChanged(Score);
         IsGameOver = false;
         IsPaused = false;
+        score = 0;
     }
 
     void Update() {
